@@ -1,8 +1,12 @@
 body{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+}
+.container{
+    display: flex;
+    justify-content: space-around;
 }
 .outer-container{
     border: 2px solid black;
@@ -51,4 +55,7 @@ body{
 }
 #grp-task{
     padding-top: 20px;
+}
+#group-container{
+    margin: 0px 20px;
 }

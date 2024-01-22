@@ -9,24 +9,24 @@
   <body onload="displayTodo()">
     <h1>TODO LIST</h1>
     <section class="container">
-    <div class="outer-container">
-      <div class="input-field">
-        <input type="text" id="input" placeholder="Add New Todo"/>
-        <button id="add">ADD</button>
-        <button id="update">UPDATE</button>
-        <div id="grp-task">
-          <input type="text" id="grp-input" placeholder="Enter a Group Name">
-          <button id="grp-btn">Group Task</button>
+      <div class="outer-container">
+        <div class="input-field">
+          <input type="text" id="input" placeholder="Add New Todo" />
+          <button id="add">ADD</button>
+          <button id="update">UPDATE</button>
+          <div id="grp-task">
+            <input
+              type="text"
+              id="grp-input"
+              placeholder="Enter a Group Name"
+            />
+            <button id="grp-btn">Group Task</button>
+          </div>
         </div>
+        <p id="err-msg"></p>
+        <div id="todo-list"></div>
       </div>
-      <p id="err-msg"></p>
-      <div id="todo-list">
-        
-      </div>
-    </div>
-    <div id="group-container">
-
-    </div>
+      <div id="group-container"></div>
     </section>
     <script src="/script.js"></script>
   </body>

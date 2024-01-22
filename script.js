@@ -12,6 +12,7 @@ let grpInput = document.getElementById("grp-input");
 let grpBtn = document.getElementById("grp-btn");
 let groupContain = document.getElementById("group-container");
 let count;
+let listAdd = false;
 let grpHead = JSON.parse(localStorage.getItem("grp-head")) || [];
 let grpTodos = JSON.parse(localStorage.getItem("grp-todo-list")) || [];
 
@@ -171,10 +172,16 @@ grpBtn.addEventListener("click",()=>{
     }
     else{
         errorMsg.innerHTML = "";
+        // if(grpHead.length > 0){
+        //     displayHidden();
+        // }
+
         grpHead.push({head:grpInput.value});
         localStorage.setItem("grp-head", JSON.stringify(grpHead));
         console.log(grpHead);
         grpInput.value = "";
+        listAdd = true;
+        groupContain.innerHTML = "";
         displayGrptodo();
     }
 })
@@ -183,41 +190,63 @@ function displayGrptodo(){
     for(let i=0; i< grpHead.length; i++){
         let p = document.createElement("p");
         groupContain.appendChild(p);
-        let textNodeHead = document.createTextNode(grpHead[i].head)
+        let textNodeHead = document.createTextNode(grpHead[i].head);
         p.appendChild(textNodeHead);
         let ul = document.createElement("ul");
         p.appendChild(ul);
+        //add the todos into grptodos
         for(let j = 0; j < todos.length; j++){
             if(todos[j].isChecked === true){
-                // JSON.parse(localStorage.getItem("todo-list"));
-                let li = document.createElement("li");
-                ul.appendChild(li);
-                //get checked todos and remove from todo-list local storage
+
                 grpTodos.push({value: todos[j].value, list: list});
                 localStorage.setItem("grp-todo-list", JSON.stringify(grpTodos));
-                let textNodeList = document.createTextNode(grpTodos[grpTodos.length-1].value);
-                li.appendChild(textNodeList);
-                //after updating remove from todo list
-                // todos.splice(j,1);
-                // localStorage.setItem("todo-list",JSON.stringify(todos));
-                // displayTodo();
                 console.log("Hello");
             }
             
         }
-        for(let k = 0; k < todos.length; k++){
-            if(todos[k].isChecked === true){
-                todos.splice(k,1);
-                localStorage.setItem("todo-list", JSON.stringify(todos));
-                console.log("deleted...");
+        //display todolist from grpTodos
+        for(let m = 0; m < grpTodos.length; m++){
+            if(grpTodos[m].list === i){
+                    let li = document.createElement("li");
+                    ul.appendChild(li);
+                    let textNodeList = document.createTextNode(grpTodos[m].value);
+                    li.appendChild(textNodeList);
+                    
             }
         }
+    
+        //remove todos from todolist
+        removeTodos();
+        function removeTodos(){
+            for(let k = 0; k < todos.length; k++){
+                if(todos[k].isChecked === true){
+                    todos.splice(k,1);
+                    localStorage.setItem("todo-list", JSON.stringify(todos));
+                    console.log("deleted...");
+                    removeTodos();
+                }
+            }
+        }
+        console.log(list);
         displayTodo();
-        list++;
+        
     }
+    if(listAdd === true){
+        list++;
+        listAdd = false;
 
+    }
+    
 }
+
+// function displayHidden(){
+//     for(let i = 0; i < grpHead.length; i++){
+//         p.remove();
+//         ul.remove();
+//     }
+
+// }
 
 (function(){
     displayGrptodo();
-})
+})()
