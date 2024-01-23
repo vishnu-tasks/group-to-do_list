@@ -1,25 +1,44 @@
 body{
+    /* display: flex; */
+    /* flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    background-color: #FAF0E6;
+    padding: 0px 100px;
+}
+#headings{
     display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+#headings h1{
+    color: black;
+}
+#headings #h_right{
+    position: absolute;
+    right: 100px;
 }
 .container{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    
 }
 .outer-container{
     border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 20px 30px;
     min-height: 500px;
+    background-color: BurlyWood;
 }
 .input-field{
     padding: 20px 10px;
     border-bottom: 1px solid grey;
+    /* background-color: black; */
 }
 .outer-container input{
     font-size: 18px;
-    padding: 5px 10px;
+    padding: 5px 8px;
 }
 .outer-container button{
     padding: 8px 15px;
@@ -34,6 +53,13 @@ body{
     height: 300px;
     overflow-y: scroll;
 }
+#todo-list p{
+    padding: 10px 0px;
+    border: 1px solid grey;
+    border-radius: 4px;
+    margin: 0px 10px 8px 0px;
+    background-color: #FFE4C4;
+}
 #err-msg{
     color: red;
 }
@@ -45,7 +71,7 @@ body{
     border: none;
     outline: none;
     border-radius: 4px;
-    margin-left: 20px;
+    margin-left: 30px;
 }
 #todo-list .edit{
     background-color: blue;
@@ -57,5 +83,37 @@ body{
     padding-top: 20px;
 }
 #group-container{
-    margin: 0px 20px;
+    /* margin: 0px 20px; */
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    min-height: 500px;
+    min-width: 300px;
+    padding-left: 20px;
+    background-color: #F8F8FF;
+    overflow-y: scroll;
+}
+#group-container h3{
+    color: white;
+    text-align: center;
+}
+#group-container p{
+    font-size: 24px;
+}
+#group-container ul{
+    padding-bottom: 10px;
+    border-bottom: 1px solid grey;
+}
+#group-container #grp_li{
+    font-size: 20px;
+    margin-bottom: 10px;
+    /* color: white; */
+    
+}
+#group-container #grp_li button{
+    padding: 5px 10px;
+    background-color: aqua;
+    border-radius: 4px;
+    margin-left: 20px;
+    outline: none;
 }

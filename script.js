@@ -14,7 +14,8 @@ let groupContain = document.getElementById("group-container");
 let count;
 let listAdd = false;
 let grpHead = JSON.parse(localStorage.getItem("grp-head")) || [];
-let grpTodos = JSON.parse(localStorage.getItem("grp-todo-list")) || [];
+// let grpTodos = JSON.parse(localStorage.getItem("grp-todo-list")) || [];
+
 
 
 
@@ -23,14 +24,7 @@ let todos = JSON.parse(localStorage.getItem("todo-list")) || [];
 updBtn.style.display = "none";
 console.log(todos);
 
-// for(let i = 0; i < todos.length; i++){
-//     if(todos[i].isChecked === false){
-//         groupTask.style.display = "none";
-//     }    
-// }
-
-
-
+//Add the task
 addBtn.addEventListener("click", ()=>{
 
     if(input.value === ""){
@@ -48,6 +42,7 @@ addBtn.addEventListener("click", ()=>{
     
 })
 
+//Display the task
 function displayTodo(){
 
     let list = "";
@@ -72,7 +67,7 @@ function displayTodo(){
     }
 }
 
-// check task
+//Check task
 function checkItem(i){
     completed = document.querySelectorAll(".completed");
     paras = document.querySelectorAll(".para");
@@ -131,7 +126,7 @@ function checkItem(i){
 
 
 
-//delete todos
+//Delete todos
 function deleteItem(index){
     todos.splice(index,1);
     localStorage.setItem("todo-list",JSON.stringify(todos));
@@ -139,7 +134,7 @@ function deleteItem(index){
 
 }
 
-//update button
+//Update button
 updBtn.addEventListener("click", ()=>{
     if(input.value === ""){
         errorMsg.innerHTML = "Please Select or update task";
@@ -157,7 +152,7 @@ updBtn.addEventListener("click", ()=>{
 
 }) 
 
-//update todos
+//Update todos
 function editItem(index){
     addBtn.style.display = "none";
     updBtn.style.display = "inline";
@@ -165,7 +160,7 @@ function editItem(index){
     delIndex = index;
 }
 
-//group todos
+//Group todos
 grpBtn.addEventListener("click",()=>{
     if(grpInput.value === ""){
         errorMsg.innerHTML = "Please Enter a Group Task Name";
@@ -175,46 +170,14 @@ grpBtn.addEventListener("click",()=>{
         // if(grpHead.length > 0){
         //     displayHidden();
         // }
-
-        grpHead.push({head:grpInput.value});
-        localStorage.setItem("grp-head", JSON.stringify(grpHead));
-        console.log(grpHead);
-        grpInput.value = "";
-        listAdd = true;
-        groupContain.innerHTML = "";
-        displayGrptodo();
-    }
-})
-let list = 0;
-function displayGrptodo(){
-    for(let i=0; i< grpHead.length; i++){
-        let p = document.createElement("p");
-        groupContain.appendChild(p);
-        let textNodeHead = document.createTextNode(grpHead[i].head);
-        p.appendChild(textNodeHead);
-        let ul = document.createElement("ul");
-        p.appendChild(ul);
-        //add the todos into grptodos
+        let listsArr = []
         for(let j = 0; j < todos.length; j++){
             if(todos[j].isChecked === true){
-
-                grpTodos.push({value: todos[j].value, list: list});
-                localStorage.setItem("grp-todo-list", JSON.stringify(grpTodos));
-                console.log("Hello");
-            }
-            
+                listsArr.push({value: todos[j].value});//modified
+            }    
         }
-        //display todolist from grpTodos
-        for(let m = 0; m < grpTodos.length; m++){
-            if(grpTodos[m].list === i){
-                    let li = document.createElement("li");
-                    ul.appendChild(li);
-                    let textNodeList = document.createTextNode(grpTodos[m].value);
-                    li.appendChild(textNodeList);
-                    
-            }
-        }
-    
+        grpHead.push({head: grpInput.value , lists: listsArr});
+        localStorage.setItem("grp-head", JSON.stringify(grpHead)); //modified
         //remove todos from todolist
         removeTodos();
         function removeTodos(){
@@ -227,6 +190,40 @@ function displayGrptodo(){
                 }
             }
         }
+        console.log(grpHead);
+        grpInput.value = "";
+        listAdd = true;
+        groupContain.innerHTML = "";
+        displayGrptodo();
+    }
+})
+//Display group task
+let list = 0;
+function displayGrptodo(){
+    
+    for(let i=0; i< grpHead.length; i++){
+        let p = document.createElement("p");
+        groupContain.appendChild(p);
+        let textNodeHead = document.createTextNode(grpHead[i].head);
+        p.appendChild(textNodeHead);
+        let ul = document.createElement("ul");
+        p.appendChild(ul);
+
+        //display todolist from grpTodos
+        for(let m = 0; m < grpHead[i].lists.length; m++){//modified
+                    let li = document.createElement("li");
+                    li.setAttribute("id", "grp_li");
+                    ul.appendChild(li);
+                    let textNodeList = document.createTextNode(grpHead[i].lists[m].value);
+                    li.appendChild(textNodeList);
+                    let undoBtn = document.createElement("button");
+                    li.appendChild(undoBtn);
+                    undoBtn.setAttribute("onclick", `undoTask(${i},${m})`)
+                    let textNodeUndo = document.createTextNode("Undo");
+                    undoBtn.appendChild(textNodeUndo);
+        }
+    
+
         console.log(list);
         displayTodo();
         
@@ -235,17 +232,34 @@ function displayGrptodo(){
         list++;
         listAdd = false;
 
-    }
-    
+    } 
 }
 
-// function displayHidden(){
-//     for(let i = 0; i < grpHead.length; i++){
-//         p.remove();
-//         ul.remove();
-//     }
+function undoTask(headIndex , listIndex){
+    groupContain.innerHTML = "";
+    console.log(headIndex, listIndex);
+    //add into todo list
+    let val = grpHead[headIndex].lists[listIndex];
+    todos.push({value: val.value, isChecked: false});
+    localStorage.setItem("todo-list", JSON.stringify(todos));
+    
+    //remove from grp-head
+    console.log(grpHead[headIndex].lists.splice(listIndex, 1));
+    localStorage.setItem("grp-head", JSON.stringify(grpHead));
+    displayGrptodo();
 
-// }
+    //remove group heading if list length is 0
+    if(grpHead[headIndex].lists.length === 0){
+        groupContain.innerHTML = "";
+        // console.log("headIndex");
+        grpHead.splice(headIndex, 1);
+        localStorage.setItem("grp-head", JSON.stringify(grpHead));
+        displayGrptodo();
+    }
+
+}
+
+
 
 (function(){
     displayGrptodo();
